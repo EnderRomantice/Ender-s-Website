@@ -1,8 +1,8 @@
 export const menuItems = [
-    { label: "Home", ariaLabel: "Go to home page", link: "#home" },
+    { label: "Projects", ariaLabel: "watch project", link: "#project" },
     { label: "About", ariaLabel: "Learn about us", link: "#about" },
-    { label: "Services", ariaLabel: "View our services", link: "/services" },
-    { label: "Contact", ariaLabel: "Get in touch", link: "/contact" },
+    { label: "life", ariaLabel: "View our services", link: "#life" },
+    { label: "Contact", ariaLabel: "Get in touch", link: "#Contact" },
 ];
 
 export const socialItems = [

@@ -1,9 +1,10 @@
 ---
 import "../../global.css";
-import StaggeredMenu from "../components/StaggeredMenu.tsx";
+import TextPressure from '../components/TextPressure';
 import TiltedCard from "../components/TiltedCard.tsx";
 import ChromaGrid from "../components/ChromaGrid";
-import Home from "../content/Home.astro";
+import Layout from "../content/Layout.astro";
+import Project from "../content/Project.astro";
 import About from "../content/About.astro";
 import { menuItems, socialItems } from "../lib/menu_config.ts";
 
@@ -27,25 +28,16 @@ import { menuItems, socialItems } from "../lib/menu_config.ts";
     <body>
         <div class="relative min-h-screen overflow-x-hidden bg-black" style={{fontFamily: 'Playwrite NZ Guides', scrollBehavior: 'smooth'}}>
 
-            <StaggeredMenu
-                class="h-screen"
-                position="right"
-                items={menuItems}
-                socialItems={socialItems}
-                displaySocials={true}
-                displayItemNumbering={true}
-                menuButtonColor="#fff"
-                openMenuButtonColor="#fff"
-                changeMenuColorOnOpen={true}
-                colors={["#B19EEF", "#5227FF"]}
-                accentColor="blue"
-                isFixed={true}
-                client:visible
-            />
+            <div class="text-white h-screen flex flex-col items-center justify-center">
 
+                <h1 class="text-4xl">Hi, I'm Ender.</h1>
+                Software engineers, open-source enthusiasts, low-level developers, and designers.
+            </div>
 
-                <Home  />
+                <Layout />
+                <Project />
                 <About />
+
 
 
         </div>

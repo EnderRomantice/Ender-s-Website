@@ -1,0 +1,20 @@
+---
+import StaggeredMenu from "../components/StaggeredMenu.tsx";
+import { menuItems, socialItems } from "../lib/menu_config.ts";
+---
+
+<StaggeredMenu
+    class="h-screen"
+    position="right"
+    items={menuItems}
+    socialItems={socialItems}
+    displaySocials={true}
+    displayItemNumbering={true}
+    menuButtonColor="#fff"
+    openMenuButtonColor="#fff"
+    changeMenuColorOnOpen={true}
+    colors={["#B19EEF", "#5227FF"]}
+    accentColor="blue"
+    isFixed={true}
+    client:visible
+/>

@@ -481,7 +481,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           aria-label="Main navigation header"
         >
           <div
-            className="flex items-center text-amber-50 text-4xl"
+            className="flex items-center text-amber-50 text-3xl"
             aria-label="Logo"
           >
             Ender's Website
