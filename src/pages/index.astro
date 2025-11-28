@@ -1,16 +1,53 @@
 ---
+import "../../global.css";
+import StaggeredMenu from "../components/StaggeredMenu.tsx";
+import TiltedCard from "../components/TiltedCard.tsx";
+import ChromaGrid from "../components/ChromaGrid";
+import Home from "../content/Home.astro";
+import About from "../content/About.astro";
+import { menuItems, socialItems } from "../lib/menu_config.ts";
 
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <title>Ender's Website</title>
+    </head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Playwrite+NZ+Guides&display=swap"
+        rel="stylesheet"
+    />
+
+    <body>
+        <div class="relative min-h-screen overflow-x-hidden bg-black" style={{fontFamily: 'Playwrite NZ Guides', scrollBehavior: 'smooth'}}>
+
+            <StaggeredMenu
+                class="h-screen"
+                position="right"
+                items={menuItems}
+                socialItems={socialItems}
+                displaySocials={true}
+                displayItemNumbering={true}
+                menuButtonColor="#fff"
+                openMenuButtonColor="#fff"
+                changeMenuColorOnOpen={true}
+                colors={["#B19EEF", "#5227FF"]}
+                accentColor="blue"
+                isFixed={true}
+                client:visible
+            />
+
+
+                <Home  />
+                <About />
+
+
+        </div>
+    </body>
 </html>
