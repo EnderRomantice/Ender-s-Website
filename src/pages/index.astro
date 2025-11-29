@@ -1,19 +1,19 @@
 ---
 import "../../global.css";
-import TextPressure from '../components/TextPressure';
+import TextPressure from "../components/TextPressure";
 import TiltedCard from "../components/TiltedCard.tsx";
 import ChromaGrid from "../components/ChromaGrid";
 import Layout from "../content/Layout.astro";
 import Project from "../content/Project.astro";
 import About from "../content/About.astro";
+import Home from "../content/Home.astro";
 import { menuItems, socialItems } from "../lib/menu_config.ts";
-
 ---
 
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/svg+xml" href="./ender.webp" />
         <meta name="viewport" content="width=device-width" />
         <meta name="generator" content={Astro.generator} />
         <title>Ender's Website</title>
@@ -26,20 +26,19 @@ import { menuItems, socialItems } from "../lib/menu_config.ts";
     />
 
     <body>
-        <div class="relative min-h-screen overflow-x-hidden bg-black" style={{fontFamily: 'Playwrite NZ Guides', scrollBehavior: 'smooth'}}>
-
-            <div class="text-white h-screen flex flex-col items-center justify-center">
-
-                <h1 class="text-4xl">Hi, I'm Ender.</h1>
-                Software engineers, open-source enthusiasts, low-level developers, and designers.
-            </div>
-
-                <Layout />
-                <Project />
-                <About />
-
-
-
+        <div
+            class="relative min-h-screen overflow-x-hidden bg-black"
+            style={{
+                fontFamily: "Playwrite NZ Guides",
+                scrollBehavior: "smooth",
+            }}
+        >
+            <Layout />
+            <Home />
+            <Project />
+            <About />
+            
         </div>
+        
     </body>
 </html>

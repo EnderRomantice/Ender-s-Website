@@ -559,6 +559,22 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                       href={it.link}
                       aria-label={it.ariaLabel}
                       data-index={idx + 1}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const href = it.link || '';
+                        const targetId = href.startsWith('#') ? href.slice(1) : href;
+                        closeMenu();
+                        const doScroll = () => {
+                          const el = targetId ? document.getElementById(targetId) : null;
+                          if (el) {
+                            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          } else if (!targetId || targetId.toLowerCase() === 'home') {
+                            try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch {}
+                          }
+                          try { history.replaceState(null, '', href); } catch {}
+                        };
+                        setTimeout(doScroll, 350);
+                      }}
                     >
                       <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">
                         {it.label}
