@@ -9,8 +9,8 @@ export default function Ease() {
     >
       <motion.h1
         className="text-4xl"
-        initial={{ opacity: 0}}
-        whileInView={{ opacity: 1}}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         transition={{ duration: 1, ease: "easeInOut" }}
       >
         Hi, I'm Ender.
@@ -19,8 +19,10 @@ export default function Ease() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 1, ease: "easeInOut" }}
+        className="text-center"
       >
-        Software engineers, open-source enthusiasts, low-level developers, and designers.
+        Software engineers, open-source enthusiasts, low-level developers, and
+        designers.
       </motion.p>
     </motion.div>
   );
