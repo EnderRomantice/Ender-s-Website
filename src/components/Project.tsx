@@ -5,7 +5,7 @@ export default function Project() {
   return (
     <motion.div
       id="project"
-      className="h-screen flex flex-col items-center justify-center text-white space-y-4 relative"
+      className="md:z-50 h-screen flex flex-col items-center justify-center text-white space-y-4 relative"
     >
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
         <div className="italic text-neutral-400/20 text-5xl md:text-7xl lg:text-8xl leading-tight text-center px-8 max-w-6xl">

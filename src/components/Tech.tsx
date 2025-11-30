@@ -1,11 +1,12 @@
 import { motion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
-import { tech_items } from "../lib/tech_config.ts";
+import { tech_items, tech_line_colors } from "../lib/tech_config.ts";
 
 export default function Tech() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [targets, setTargets] = useState<Array<{ x: number; y: number }>>([]);
+  const [fadeSeed, setFadeSeed] = useState(0);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -32,6 +33,7 @@ export default function Tech() {
       return { x, y };
     });
     setTargets(arr);
+    setFadeSeed(Date.now());
   }, []);
 
   useEffect(() => {
@@ -58,20 +60,42 @@ export default function Tech() {
         return { x, y };
       });
       setTargets(arr);
+      setFadeSeed(Date.now());
     };
     window.addEventListener("resize", h);
     return () => window.removeEventListener("resize", h);
   }, []);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const { width, height } = el.getBoundingClientRect();
+            const pad = 36;
+            const arr = tech_items.map(() => ({
+              x: pad + Math.random() * (width - pad * 2),
+              y: pad + Math.random() * (height - pad * 2),
+            }));
+            setTargets(arr);
+            setFadeSeed(Date.now());
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   return (
     <motion.div
       id="tech"
-      className="h-screen w-screen flex flex-col items-center justify-center text-white space-y-4"
+      className="h-screen w-screen flex flex-col items-center justify-center text-black space-y-4"
     >
       <motion.div
         ref={containerRef}
-        initial={{ opacity: 0, y: 100 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
         className="relative w-full h-[85vh] md:h-[88vh] md:px-8 px-4"
       >
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
@@ -80,31 +104,70 @@ export default function Tech() {
             trusted tools and loyal companions.
           </div>
         </div>
+        <motion.div
+          initial={{ opacity: 0, y: 100 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
+
+        <svg className="absolute inset-0 z-0" width="100%" height="100%">
+          {targets.length === tech_items.length && (() => {
+            const groups: Record<string, number[]> = {};
+            tech_items.forEach((t, i) => {
+              const k = (t as any).type || "unknown";
+              if (!groups[k]) groups[k] = [];
+              groups[k].push(i);
+            });
+            const lines: JSX.Element[] = [];
+            let lineCounter = 0;
+            Object.entries(groups).forEach(([type, idxs]) => {
+              const color = tech_line_colors[type] || "rgba(255,255,255,0.15)";
+              for (let i = 0; i < idxs.length - 1; i++) {
+                const a = targets[idxs[i]];
+                const b = targets[idxs[i + 1]];
+                const ax = (a?.x || 0) + 36;
+                const ay = (a?.y || 0) + 36;
+                const bx = (b?.x || 0) + 36;
+                const by = (b?.y || 0) + 36;
+                lines.push(
+                  <motion.line
+                    key={`${type}-${idxs[i]}-${idxs[i + 1]}`}
+                    x1={ax}
+                    y1={ay}
+                    x2={bx}
+                    y2={by}
+                    stroke={color}
+                    strokeWidth={2}
+                    initial={{ opacity: 0, strokeWidth: 0 }}
+                    whileInView={{ opacity: 1, strokeWidth: 2 }}
+                    animate={{ x1: ax, y1: ay, x2: bx, y2: by }}
+                    transition={{ duration: 0.5, delay: lineCounter * 0.05 }}
+                    style={{ filter: `drop-shadow(0 0 8px ${color})` }}
+                  />
+                );
+                lineCounter++;
+              }
+            });
+            return lines;
+          })()}
+        </svg>
+
         {tech_items.map((tech, index) => (
           <TechItem
-            key={index}
+            key={`${fadeSeed}-${index}`}
             tech={tech}
             index={index}
             containerRef={containerRef}
             target={targets[index]}
           />
         ))}
+        </motion.div>
       </motion.div>
     </motion.div>
   );
 }
 
-function TechItem({
-  tech,
-  index,
-  containerRef,
-  target,
-}: {
-  tech: { name: string; image: string; link?: string };
-  index: number;
-  containerRef: React.RefObject<HTMLDivElement>;
-  target?: { x: number; y: number };
-}) {
+function TechItem({ tech, index, containerRef, target }: { tech: { name: string; image: string; link?: string; type?: string }; index: number; containerRef: React.RefObject<HTMLDivElement>; target?: { x: number; y: number } }) {
   const elRef = useRef<HTMLDivElement | null>(null);
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const homeRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -127,33 +190,12 @@ function TechItem({
       ? Math.min(maxY, Math.max(minY, target.y))
       : Math.random() * (maxY - minY) + minY;
     homeRef.current = { x: tX, y: tY };
-    const startEdge = Math.floor(Math.random() * 4);
-    const startX =
-      startEdge === 0
-        ? -cb.width * 0.2
-        : startEdge === 1
-          ? cb.width * 1.2
-          : Math.random() * cb.width;
-    const startY =
-      startEdge === 2
-        ? -cb.height * 0.2
-        : startEdge === 3
-          ? cb.height * 1.2
-          : Math.random() * cb.height;
-    setPos({ x: startX, y: startY });
-    gsap.set(el, { backgroundColor: "rgba(255,255,255,0.1)", color: "#fff" });
-    gsap.to(el, {
-      backgroundColor: "#ffffff",
-      color: "#000000",
-      duration: 1.6 + index * 0.08,
-      ease: "power2.out",
-    });
-    const state = { x: startX, y: startY } as any;
+    const state = { x: pos.x, y: pos.y } as any;
     gsap.to(state, {
       x: tX,
       y: tY,
-      duration: 2.1 + index * 0.1,
-      ease: "power3.out",
+      duration: 0.4,
+      ease: "power2.out",
       onUpdate: function () {
         setPos({ x: state.x, y: state.y });
       },
@@ -172,15 +214,15 @@ function TechItem({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       aria-label={`Open ${tech.name} docs`}
-      className="absolute p-4 rounded-4xl border border-white/10 shadow-lg select-none no-underline text-current"
+      className="z-10 absolute p-4 rounded-4xl border border-white/10 shadow-lg select-none no-underline text-current bg-white text-black"
       style={{ transform: `translate(${pos.x}px, ${pos.y}px)` }}
     >
-      <div className="flex flex-col items-center gap-3">
+      <motion.div className="flex flex-col items-center gap-3" initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: index * 0.06 }}>
         {tech.image && (
           <img src={tech.image} alt={tech.name} className="w-12 h-12" />
         )}
         <h4 className="text-base font-semibold tracking-tight">{tech.name}</h4>
-      </div>
+      </motion.div>
     </a>
   );
 }
