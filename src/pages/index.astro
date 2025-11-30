@@ -5,8 +5,8 @@ import TiltedCard from "../components/TiltedCard.tsx";
 import ChromaGrid from "../components/ChromaGrid";
 import Layout from "../content/Layout.astro";
 import Project from "../content/Project.astro";
+import Tech from "../content/Tech.astro";
 import About from "../content/About.astro";
-import Home from "../content/Home.astro";
 import { menuItems, socialItems } from "../lib/menu_config.ts";
 ---
 
@@ -16,7 +16,7 @@ import { menuItems, socialItems } from "../lib/menu_config.ts";
         <link rel="icon" type="image/svg+xml" href="./ender.webp" />
         <meta name="viewport" content="width=device-width" />
         <meta name="generator" content={Astro.generator} />
-        <meta name="description" content="Ender's Website">
+        <meta name="description" content="Ender's Website" />
         <title>Ender's Website</title>
     </head>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -25,21 +25,23 @@ import { menuItems, socialItems } from "../lib/menu_config.ts";
         href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Playwrite+NZ+Guides&display=swap"
         rel="stylesheet"
     />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap"
+        rel="stylesheet"
+    />
 
     <body>
         <div
-            class="relative min-h-screen overflow-x-hidden bg-black"
+            class="relative min-h-screen overflow-x-hidden bg-black italic text-2xl overflow-hidden"
             style={{
-                fontFamily: "Playwrite NZ Guides",
+                fontFamily: "Cormorant Garamond",
                 scrollBehavior: "smooth",
             }}
         >
             <Layout />
-            <Home />
-            <Project />
             <About />
-
+            <Project />
+            <Tech />
         </div>
-
     </body>
 </html>

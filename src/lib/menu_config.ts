@@ -1,7 +1,7 @@
 export const menuItems = [
-  { label: "Home", ariaLabel: "Home", link: "#home" },
-  { label: "Projects", ariaLabel: "watch project", link: "#project" },
   { label: "About", ariaLabel: "Learn about us", link: "#about" },
+  { label: "Projects", ariaLabel: "watch project", link: "#project" },
+  { label: "Tech", ariaLabel: "watch tech stack", link: "#tech" },
 ];
 
 export const socialItems = [

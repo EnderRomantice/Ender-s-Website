@@ -436,6 +436,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   return (
     <div
       className={`sm-scope z-40 ${isFixed ? "fixed top-0 left-0 w-screen h-screen overflow-hidden" : "w-full h-full"}`}
+      style={{ fontFamily: "Playwrite NZ Guides" }}
     >
       <div
         className={
@@ -543,7 +544,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         >
           <div className="sm-panel-inner flex-1 flex flex-col gap-5">
             <ul
-              className="sm-panel-list list-none m-0 p-0 flex flex-col gap-2"
+              className="sm-panel-list list-none m-0 p-0 flex flex-col space-y-4 gap-2"
               role="list"
               data-numbering={displayItemNumbering || undefined}
             >
@@ -560,17 +561,31 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                       data-index={idx + 1}
                       onClick={(e) => {
                         e.preventDefault();
-                        const href = it.link || '';
-                        const targetId = href.startsWith('#') ? href.slice(1) : href;
+                        const href = it.link || "";
+                        const targetId = href.startsWith("#")
+                          ? href.slice(1)
+                          : href;
                         closeMenu();
                         const doScroll = () => {
-                          const el = targetId ? document.getElementById(targetId) : null;
+                          const el = targetId
+                            ? document.getElementById(targetId)
+                            : null;
                           if (el) {
-                            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                          } else if (!targetId || targetId.toLowerCase() === 'home') {
-                            try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch {}
+                            el.scrollIntoView({
+                              behavior: "smooth",
+                              block: "start",
+                            });
+                          } else if (
+                            !targetId ||
+                            targetId.toLowerCase() === "home"
+                          ) {
+                            try {
+                              window.scrollTo({ top: 0, behavior: "smooth" });
+                            } catch {}
                           }
-                          try { history.replaceState(null, '', href); } catch {}
+                          try {
+                            history.replaceState(null, "", href);
+                          } catch {}
                         };
                         setTimeout(doScroll, 350);
                       }}
