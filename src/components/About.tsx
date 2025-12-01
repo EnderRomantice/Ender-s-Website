@@ -42,7 +42,7 @@ export default function About() {
         <motion.img
           src="/ender.webp"
           alt="Ender's Avatar"
-          className="w-24 h-24 rounded-full my-10 ring-4 ring-white/40 transition-transform duration-300 group-hover:scale-105"
+          className="w-24 h-24 rounded-full my-10 ring-4 ring-white/40 transition-transform duration-300 group-hover:scale-105 group-hover:shadow-[0_0_30px_rgba(0,0,0,0.5)] shadow-blue-600"
         />
 
         <h1>{about_profile.name}</h1>
