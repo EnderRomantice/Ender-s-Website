@@ -19,7 +19,7 @@ export default function About() {
       className="md:z-50 group flex flex-col md:flex-row space-x-4 md:space-x-8 justify-center items-center text-white md:space-y-0 space-y-12"
     >
       <motion.div
-        className="group flex flex-col text-center justify-center space-y-1 items-center md:w-60 w-80 rounded-4xl bg-white/5 backdrop-blur-md border border-white/10 shadow-lg hover:bg-white hover:text-black hover:shadow-xl transition-transform duration-300 ease-out will-change-transform"
+        className="group flex flex-col text-center justify-center space-y-1 items-center md:w-60 w-80 rounded-4xl bg-white/5 backdrop-blur-md border border-white/10 shadow-lg hover:bg-white hover:text-black hover:shadow-xl transition duration-300 ease-out will-change-transform"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => {
           setHovered(false);
