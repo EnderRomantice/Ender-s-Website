@@ -513,6 +513,9 @@ class ArcballControl {
   public pointerRotation = quat.create();
   public rotationVelocity = 0;
   public rotationAxis = vec3.fromValues(1, 0, 0);
+  public autoRotationEnabled = true;
+  public autoRotationSpeed = 0.15;
+  public autoRotationAxis = vec3.fromValues(0, 1, 0);
 
   public snapDirection = vec3.fromValues(0, 0, -1);
   public snapTargetDirection: vec3 | null = null;
@@ -521,6 +524,8 @@ class ArcballControl {
   private previousPointerPos = vec2.create();
   private _rotationVelocity = 0;
   private _combinedQuat = quat.create();
+  private lastInteractionTime = 0;
+  private idleTimeout = 500; // 0.5秒无交互后恢复旋转
 
   private readonly EPSILON = 0.1;
   private readonly IDENTITY_QUAT = quat.create();
@@ -528,21 +533,26 @@ class ArcballControl {
   constructor(canvas: HTMLCanvasElement, updateCallback?: UpdateCallback) {
     this.canvas = canvas;
     this.updateCallback = updateCallback || (() => undefined);
+    this.lastInteractionTime = 0; // 设置为0，确保一开始就自动旋转
 
     canvas.addEventListener("pointerdown", (e: PointerEvent) => {
       vec2.set(this.pointerPos, e.clientX, e.clientY);
       vec2.copy(this.previousPointerPos, this.pointerPos);
       this.isPointerDown = true;
+      this.lastInteractionTime = Date.now();
     });
     canvas.addEventListener("pointerup", () => {
       this.isPointerDown = false;
+      this.lastInteractionTime = Date.now();
     });
     canvas.addEventListener("pointerleave", () => {
       this.isPointerDown = false;
+      this.lastInteractionTime = Date.now();
     });
     canvas.addEventListener("pointermove", (e: PointerEvent) => {
       if (this.isPointerDown) {
         vec2.set(this.pointerPos, e.clientX, e.clientY);
+        this.lastInteractionTime = Date.now();
       }
     });
     canvas.style.touchAction = "none";
@@ -552,6 +562,20 @@ class ArcballControl {
     const timeScale = deltaTime / targetFrameDuration + 0.00001;
     let angleFactor = timeScale;
     const snapRotation = quat.create();
+    const autoRotation = quat.create();
+
+    const currentTime = Date.now();
+    const timeSinceLastInteraction = currentTime - this.lastInteractionTime;
+
+    if (
+      this.autoRotationEnabled &&
+      !this.isPointerDown &&
+      timeSinceLastInteraction > this.idleTimeout &&
+      Math.abs(this.rotationVelocity) < 0.01
+    ) {
+      const autoAngle = (this.autoRotationSpeed * deltaTime) / 100;
+      quat.setAxisAngle(autoRotation, this.autoRotationAxis, autoAngle);
+    }
 
     if (this.isPointerDown) {
       const INTENSITY = 0.3 * timeScale;
@@ -604,11 +628,12 @@ class ArcballControl {
       }
     }
 
-    const combinedQuat = quat.multiply(
+    let combinedQuat = quat.multiply(
       quat.create(),
       snapRotation,
       this.pointerRotation,
     );
+    combinedQuat = quat.multiply(quat.create(), autoRotation, combinedQuat);
     this.orientation = quat.multiply(
       quat.create(),
       combinedQuat,
@@ -1199,6 +1224,7 @@ class InfiniteGridMenu {
 
     if (isMoving) {
       this.firstInteraction = true;
+      this.control.lastInteractionTime = Date.now();
     }
 
     if (isMoving !== this.movementActive) {
