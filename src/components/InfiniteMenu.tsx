@@ -525,7 +525,7 @@ class ArcballControl {
   private _rotationVelocity = 0;
   private _combinedQuat = quat.create();
   private lastInteractionTime = 0;
-  private idleTimeout = 500; // 0.5秒无交互后恢复旋转
+  private idleTimeout = 1000; // 1秒无交互后恢复旋转
 
   private readonly EPSILON = 0.1;
   private readonly IDENTITY_QUAT = quat.create();
@@ -550,10 +550,13 @@ class ArcballControl {
       this.lastInteractionTime = Date.now();
     });
     canvas.addEventListener("pointermove", (e: PointerEvent) => {
+      this.lastInteractionTime = Date.now();
       if (this.isPointerDown) {
         vec2.set(this.pointerPos, e.clientX, e.clientY);
-        this.lastInteractionTime = Date.now();
       }
+    });
+    canvas.addEventListener("pointerenter", () => {
+      this.lastInteractionTime = Date.now();
     });
     canvas.style.touchAction = "none";
   }
