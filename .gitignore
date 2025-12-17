@@ -24,3 +24,6 @@ pnpm-debug.log*
 .idea/
 
 .pnpm-lock.yaml
+
+# Windows special device files
+nul

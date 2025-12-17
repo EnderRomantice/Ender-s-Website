@@ -4,7 +4,7 @@ import {
   about_animation,
   about_profile,
 } from "../lib/about_config.ts";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export default function About() {
   const lines = about_lines.map((l) => Array.from(l));

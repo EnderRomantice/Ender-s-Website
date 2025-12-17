@@ -1,6 +1,6 @@
 export const about_profile = {
   name: "Ender",
-  working: "XTrace",
+  working: "Xtrace",
   job: "Full-Stack Developer",
   live: "Chengdu",
   email: "enderromantic@gmail.com",
