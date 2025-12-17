@@ -435,7 +435,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
   return (
     <div
-      className={`sm-scope ${isFixed ? "fixed top-0 left-0 w-screen h-screen overflow-hidden" : "w-full h-full"}`}
+      className={`sm-scope pointer-events-none z-99 ${isFixed ? "fixed top-0 left-0 w-screen h-screen overflow-hidden" : "w-full h-full"}`}
       style={{ fontFamily: "Playwrite NZ Guides" }}
     >
       <div
@@ -477,7 +477,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         </div>
 
          <header
-           className="staggered-menu-header absolute top-0 left-0 w-full flex items-center justify-between p-[2em] bg-transparent z-9999"
+           className="staggered-menu-header absolute top-0 left-0 w-full flex items-center justify-between p-[2em] bg-transparent z-[9999] pointer-events-none"
            aria-label="Main navigation header"
          >
           <div
@@ -538,7 +538,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         <aside
           id="staggered-menu-panel"
           ref={panelRef}
-          className="staggered-menu-panel absolute top-0 right-0 h-full bg-white flex flex-col p-[6em_2em_2em_2em] overflow-y-auto z-[9999] backdrop-blur-[12px]"
+          className={`staggered-menu-panel absolute top-0 right-0 h-full bg-white flex flex-col p-[6em_2em_2em_2em] overflow-y-auto z-[9999] backdrop-blur-[12px] ${open ? "pointer-events-auto" : "pointer-events-none"}`}
           style={{ WebkitBackdropFilter: "blur(12px)" }}
           aria-hidden={!open}
         >

@@ -27,14 +27,14 @@ import About from "../content/About.astro";
     />
 
     <body class="bg-black">
+        <Layout />
         <div
-            class="relative min-h-screen overflow-x-hidden bg-black italic text-2xl overflow-hidden"
+            class="relative min-h-screen overflow-x-hidden bg-black italic text-2xl overflow-hidden z-0"
             style={{
                 fontFamily: "Cormorant Garamond",
                 scrollBehavior: "smooth",
             }}
         >
-            <Layout />
             <About />
             <Project />
             <Tech />
