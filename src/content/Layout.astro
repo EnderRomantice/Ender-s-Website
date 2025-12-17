@@ -1,8 +1,29 @@
 ---
 import StaggeredMenu from "../components/StaggeredMenu.tsx";
+import FungalGrowthEffect from "../components/FungalGrowthEffect.tsx";
 import { menuItems, socialItems } from "../lib/menu_config.ts";
 ---
 
+<FungalGrowthEffect
+    width="100vw"
+    height="100vh"
+    color="#888888"
+    maxLineWidth={0.3}
+    minLineWidth={0.05}
+    growthSpeed={2.0}
+    branchProbability={0.03}
+    maxLines={600}
+    maxLineLength={120}
+    lineLifetime={400}
+    fadeOut={false}
+    sensitivity={15}
+    enabled={true}
+    autoSpawnInterval={500}
+    autoSpawnDelay={500}
+    autoSpawnCount={8}
+    className="pointer-events-none"
+    client:visible
+/>
 <StaggeredMenu
     class="h-screen"
     position="right"

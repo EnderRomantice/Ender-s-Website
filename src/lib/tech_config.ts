@@ -42,12 +42,6 @@ export const tech_items = [
     description: "backend",
   },
   {
-    image: "/gin.svg",
-    link: "https://gin-gonic.com/",
-    title: "Gin",
-    description: "backend",
-  },
-  {
     image: "/astro.svg",
     link: "https://astro.build/",
     title: "Astro",

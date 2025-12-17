@@ -705,7 +705,7 @@ class ArcballControl {
   }
 }
 
-interface MenuItem {
+export interface MenuItem {
   image: string;
   link: string;
   title: string;
@@ -794,7 +794,7 @@ class InfiniteGridMenu {
     far: 40,
     fov: Math.PI / 4,
     aspect: 1,
-    position: vec3.fromValues(0, 0, 2),
+    position: vec3.fromValues(0, 0, 1.5),
     up: vec3.fromValues(0, 1, 0),
     matrices: {
       view: mat4.create(),
@@ -1300,7 +1300,7 @@ const defaultItems: MenuItem[] = [
   },
 ];
 
-interface InfiniteMenuProps {
+export interface InfiniteMenuProps {
   items?: MenuItem[];
 }
 

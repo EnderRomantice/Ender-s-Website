@@ -25,11 +25,11 @@ export default function Project() {
             initial={{ opacity: 0, y: 5 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="group md:mx-4 mx-8 p-4 rounded-lg shadow-md text-white hover:bg transition duration-300 ease-in-out hover:bg-white hover:text-black hover:scale-105 hover:-rotate-1"
+            className="group md:mx-4 mx-8 p-4 rounded-lg shadow-md hover:shadow-lg text-white hover:bg-gray-700/40 transition-all duration-300 ease-in-out cursor-pointer"
           >
-            <h3 className="text-xl">{project.name}</h3>
+            <h3 className="text-xl group-hover:text-gray-100">{project.name}</h3>
 
-            <p className="text-gray-300  group-hover:text-neutral-500">
+            <p className="text-gray-300 group-hover:text-gray-400">
               {project.description}
             </p>
             {Array.isArray((project as any).tags) &&
@@ -38,7 +38,7 @@ export default function Project() {
                   {(project as any).tags.map((tag: string, i: number) => (
                     <span
                       key={i}
-                      className="text-xs px-2 py-1 rounded-full border border-white/20 bg-white/10 text-white group-hover:text-black group-hover:bg-black/5 group-hover:border-black/20"
+                       className="text-xs px-2 py-1 rounded-full border border-white/20 bg-white/10 text-white group-hover:text-white group-hover:bg-white/30 group-hover:border-white/50 transition-all duration-300"
                     >
                       {tag}
                     </span>
