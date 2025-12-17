@@ -717,6 +717,7 @@ class InfiniteGridMenu {
   private discGeo!: DiscGeometry;
   private worldMatrix = mat4.create();
   private tex: WebGLTexture | null = null;
+  private textureReady = false;
   private control!: ArcballControl;
 
   private discLocations!: {
@@ -756,7 +757,8 @@ class InfiniteGridMenu {
   private movementActive = false;
 
   private TARGET_FRAME_DURATION = 1000 / 60;
-  private SPHERE_RADIUS = 2;
+  private SPHERE_RADIUS = 3;
+  private firstInteraction = false;
 
   public camera: Camera = {
     matrix: mat4.create(),
@@ -764,7 +766,7 @@ class InfiniteGridMenu {
     far: 40,
     fov: Math.PI / 4,
     aspect: 1,
-    position: vec3.fromValues(0, 0, 3),
+    position: vec3.fromValues(0, 0, 2),
     up: vec3.fromValues(0, 1, 0),
     matrices: {
       view: mat4.create(),
@@ -934,14 +936,46 @@ class InfiniteGridMenu {
             const img = new Image();
             img.crossOrigin = "anonymous";
             img.onload = () => resolve(img);
-            img.src = item.image;
+            img.onerror = (error) => {
+              console.error("Failed to load image:", item.image, error);
+              resolve(img);
+            };
+            img.src = item.image.startsWith("/")
+              ? window.location.origin + item.image
+              : item.image;
           }),
       ),
     ).then((images) => {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
       images.forEach((img, i) => {
         const x = (i % this.atlasSize) * cellSize;
         const y = Math.floor(i / this.atlasSize) * cellSize;
-        ctx.drawImage(img, x, y, cellSize, cellSize);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(x, y, cellSize, cellSize);
+        ctx.clip();
+        ctx.clearRect(x, y, cellSize, cellSize);
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(x, y, cellSize, cellSize);
+
+        if (img.complete && img.naturalWidth > 0) {
+          const margin = cellSize * 0.15;
+          const drawWidth = cellSize - 2 * margin;
+          const drawHeight = cellSize - 2 * margin;
+          ctx.drawImage(img, x + margin, y + margin, drawWidth, drawHeight);
+        } else {
+          ctx.fillStyle = "#cccccc";
+          ctx.fillRect(x, y, cellSize, cellSize);
+          ctx.fillStyle = "#000000";
+          ctx.font = "48px Arial";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("?", x + cellSize / 2, y + cellSize / 2);
+        }
+        ctx.restore();
       });
 
       gl.bindTexture(gl.TEXTURE_2D, this.tex);
@@ -954,6 +988,7 @@ class InfiniteGridMenu {
         canvas,
       );
       gl.generateMipmap(gl.TEXTURE_2D);
+      this.textureReady = true;
     });
   }
 
@@ -1156,15 +1191,29 @@ class InfiniteGridMenu {
   private onControlUpdate(deltaTime: number): void {
     const timeScale = deltaTime / this.TARGET_FRAME_DURATION + 0.0001;
     let damping = 5 / timeScale;
-    let cameraTargetZ = 3;
+    let cameraTargetZ = 5;
 
     const isMoving =
       this.control.isPointerDown ||
       Math.abs(this.smoothRotationVelocity) > 0.01;
 
+    if (isMoving) {
+      this.firstInteraction = true;
+    }
+
     if (isMoving !== this.movementActive) {
       this.movementActive = isMoving;
       this.onMovementChange(isMoving);
+    }
+
+    if (this.firstInteraction) {
+      if (isMoving) {
+        cameraTargetZ = 3;
+        if (this.control.isPointerDown) {
+          cameraTargetZ += this.control.rotationVelocity * 80 + 2.5;
+        }
+        damping = 7 / timeScale;
+      }
     }
 
     if (!this.control.isPointerDown) {
@@ -1176,9 +1225,6 @@ class InfiniteGridMenu {
         this.getVertexWorldPosition(nearestVertexIndex),
       );
       this.control.snapTargetDirection = snapDirection;
-    } else {
-      cameraTargetZ += this.control.rotationVelocity * 80 + 2.5;
-      damping = 7 / timeScale;
     }
 
     this.camera.position[2] +=

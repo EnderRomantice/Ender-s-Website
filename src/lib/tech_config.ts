@@ -1,33 +1,9 @@
 export const tech_items = [
   {
-    image: "/doubao.png",
-    link: "https://docs.astro.build",
-    title: "Astro",
+    image: "/vuedotjs.svg",
+    link: "https://vuejs.org/guide/",
+    title: "Vue.js",
     description: "frontend",
-  },
-  {
-    image: "/xy.jpg",
-    link: "https://fastapi.tiangolo.com",
-    title: "FastAPI",
-    description: "backend",
-  },
-  {
-    image: "/wjh.jpg",
-    link: "https://go.dev/doc/",
-    title: "Go",
-    description: "language",
-  },
-  {
-    image: "/nextdotjs.svg",
-    link: "https://nextjs.org/docs",
-    title: "Next.js",
-    description: "frontend",
-  },
-  {
-    image: "/ender.webp",
-    link: "https://docs.python.org/3/",
-    title: "Python",
-    description: "language",
   },
   {
     image: "/react.svg",
@@ -36,40 +12,64 @@ export const tech_items = [
     description: "frontend",
   },
   {
-    image: "/tailwindcss.svg",
-    link: "https://tailwindcss.com/docs",
-    title: "Tailwind CSS",
-    description: "frontend",
-  },
-  {
     image: "/typescript.svg",
-    link: "https://www.typescriptlang.org/docs/",
+    link: "https://www.typescriptlang.org/",
     title: "TypeScript",
     description: "language",
   },
   {
+    image: "/tailwindcss.svg",
+    link: "https://tailwindcss.com/",
+    title: "Tailwind CSS",
+    description: "frontend",
+  },
+  {
+    image: "/go.svg",
+    link: "https://go.dev/",
+    title: "Go",
+    description: "backend",
+  },
+  {
+    image: "/python.svg",
+    link: "https://www.python.org/",
+    title: "Python",
+    description: "backend",
+  },
+  {
+    image: "/fastapi.svg",
+    link: "https://fastapi.tiangolo.com/",
+    title: "FastAPI",
+    description: "backend",
+  },
+  {
+    image: "/gin.svg",
+    link: "https://gin-gonic.com/",
+    title: "Gin",
+    description: "backend",
+  },
+  {
+    image: "/astro.svg",
+    link: "https://astro.build/",
+    title: "Astro",
+    description: "frontend",
+  },
+  {
+    image: "/nextdotjs.svg",
+    link: "https://nextjs.org/",
+    title: "Next.js",
+    description: "frontend",
+  },
+  {
     image: "/vercel.svg",
-    link: "https://vercel.com/docs",
+    link: "https://vercel.com/",
     title: "Vercel",
     description: "infra",
   },
   {
     image: "/netlify.svg",
-    link: "https://docs.netlify.com/",
+    link: "https://www.netlify.com/",
     title: "Netlify",
     description: "infra",
-  },
-  {
-    image: "/gin.svg",
-    link: "https://gin-gonic.com/docs/",
-    title: "Gin",
-    description: "backend",
-  },
-  {
-    image: "/vuedotjs.svg",
-    link: "https://vuejs.org/guide/",
-    title: "Vue.js",
-    description: "frontend",
   },
 ];
 
