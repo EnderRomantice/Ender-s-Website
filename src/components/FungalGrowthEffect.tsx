@@ -88,6 +88,9 @@ const hexToRgba = (hex: string, alpha: number): string => {
   return `rgba(136, 136, 136, ${alpha})`;
 };
 
+// 强制淡出持续时间（帧数）
+const FORCED_FADE_DURATION = 60;
+
 const FungalGrowthEffect: React.FC<FungalGrowthEffectProps> = ({
   width = "100%",
   height = "100%",
@@ -120,13 +123,22 @@ const FungalGrowthEffect: React.FC<FungalGrowthEffectProps> = ({
     (x: number, y: number, count: number = 3) => {
       // 创建新的生长点
       const points = growthPointsRef.current;
-      if (points.length >= maxLines) {
-        // 找到最旧的点并标记为淡出移除
-        const oldestPoint = points[0];
-        if (oldestPoint) {
-          oldestPoint.isActive = false;
-           // 设置较短的生命值用于淡出（约30帧）
-          oldestPoint.life = Math.min(oldestPoint.life, 30);
+      // 计算添加新点后可能超过限制的数量
+      const excess = points.length + count - maxLines;
+      if (excess > 0) {
+        if (fadeOut) {
+          // 淡出模式：标记最旧的excess个点为不活跃，设置短生命值用于淡出
+          for (let i = 0; i < excess; i++) {
+            const point = points[i];
+            if (point) {
+              point.isActive = false;
+              // 设置淡出持续时间
+              point.life = FORCED_FADE_DURATION;
+            }
+          }
+        } else {
+          // 非淡出模式：直接移除最前面的excess个点
+          points.splice(0, excess);
         }
       }
 
@@ -162,6 +174,7 @@ const FungalGrowthEffect: React.FC<FungalGrowthEffectProps> = ({
       minLineWidth,
       lineLifetime,
       maxLines,
+      fadeOut,
     ],
   );
 
@@ -280,9 +293,10 @@ const FungalGrowthEffect: React.FC<FungalGrowthEffectProps> = ({
     // 更新每个生长点
     let activeCount = 0;
     let branchedCount = 0;
-    points.forEach((point, index) => {
-       if (!point.isActive) {
-        if (fadeOut || point.life < point.maxLife) {
+     points.forEach((point, index) => {
+        if (!point.isActive) {
+        // 不活跃的点总是减少生命值（用于强制淡出）
+        if (point.life > 0) {
           point.life -= 1;
         }
         return;
@@ -332,6 +346,10 @@ const FungalGrowthEffect: React.FC<FungalGrowthEffectProps> = ({
       // 检查是否超过最大长度
       if (point.length >= point.maxLength) {
         point.isActive = false;
+        // 设置缩短淡出时间，确保有足够的帧数进行缩短效果
+        if (point.life > FORCED_FADE_DURATION) {
+          point.life = FORCED_FADE_DURATION;
+        }
         return;
       }
 
@@ -405,30 +423,44 @@ const FungalGrowthEffect: React.FC<FungalGrowthEffectProps> = ({
     // 清空画布（使用透明背景，让底层内容可见）
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 绘制所有生长点的路径
+     // 绘制所有生长点的路径
     let drawnCount = 0;
     points.forEach((point) => {
       if (point.path.length < 2) return;
 
+      // 计算要绘制的path点数（用于缩短效果）
+      let drawPathLength = point.path.length;
+      let drawAlpha = 1.0;
+      
+      // 对于不活跃且正在淡出的点，应用缩短和透明度效果
+      if (!point.isActive && point.life <= FORCED_FADE_DURATION) {
+        // 计算淡出比例（1.0 -> 0.0）
+        const fadeRatio = point.life / FORCED_FADE_DURATION;
+        drawAlpha = fadeRatio;
+        // 根据淡出比例缩短路径（保留至少1个点）
+        drawPathLength = Math.max(1, Math.floor(point.path.length * fadeRatio));
+      } else if (fadeOut || point.life < point.maxLife) {
+        // 正常淡出逻辑：只应用透明度
+        if (point.life <= FORCED_FADE_DURATION && !point.isActive) {
+          drawAlpha = point.life / FORCED_FADE_DURATION;
+        } else {
+          drawAlpha = point.life / point.maxLife;
+        }
+      }
+
+      // 确保至少绘制2个点才能形成线段
+      if (drawPathLength < 2) return;
+
       ctx.beginPath();
       ctx.moveTo(point.path[0].x, point.path[0].y);
 
-      for (let i = 1; i < point.path.length; i++) {
+      // 只绘制前drawPathLength个点
+      const endIndex = Math.min(drawPathLength, point.path.length);
+      for (let i = 1; i < endIndex; i++) {
         ctx.lineTo(point.path[i].x, point.path[i].y);
       }
 
-      // 计算透明度（基于生命值）
-       let alpha = 1.0;
-       if (fadeOut || point.life < point.maxLife) {
-         // 强制移除：如果生命周期很短（<=30帧）且非活跃，使用30帧淡出
-         if (point.life <= 30 && !point.isActive) {
-           alpha = point.life / 30;
-         } else {
-           alpha = point.life / point.maxLife;
-         }
-       }
-
-      const strokeStyle = hexToRgba(point.color, alpha);
+      const strokeStyle = hexToRgba(point.color, drawAlpha);
       ctx.strokeStyle = strokeStyle;
       ctx.lineWidth = point.width;
       ctx.lineCap = "round";
