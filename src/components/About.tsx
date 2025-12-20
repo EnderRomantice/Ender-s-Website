@@ -46,8 +46,8 @@ export default function About() {
         />
 
         <h1>{about_profile.name}</h1>
-        <h2>{about_profile.job}</h2>
-        <h3 className="mb-4">{about_profile.working}</h3>
+        <h2>open-source contributor</h2>
+        <h3 className="mb-4">{about_profile.live}</h3>
       </motion.div>
 
       <motion.div className="w-120 md:text-4xl text-2xl text-center md:mx-4 mx-8 space-y-2">

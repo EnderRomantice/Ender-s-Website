@@ -27,13 +27,13 @@ export const tech_items = [
     image: "/go.svg",
     link: "https://go.dev/",
     title: "Go",
-    description: "backend",
+    description: "language",
   },
   {
     image: "/python.svg",
     link: "https://www.python.org/",
     title: "Python",
-    description: "backend",
+    description: "language",
   },
   {
     image: "/fastapi.svg",
@@ -64,6 +64,24 @@ export const tech_items = [
     link: "https://www.netlify.com/",
     title: "Netlify",
     description: "infra",
+  },
+  {
+    image: "/github.svg",
+    link: "https://github.com/",
+    title: "GitHub",
+    description: "tooling",
+  },
+  {
+    image: "/docker.svg",
+    link: "https://www.docker.com/",
+    title: "Docker",
+    description: "infra",
+  },
+  {
+    image: "/vite.svg",
+    link: "https://vitejs.dev/",
+    title: "Vite",
+    description: "frontend",
   },
 ];
 
