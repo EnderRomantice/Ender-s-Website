@@ -1,6 +1,5 @@
 export const about_profile = {
   name: "Ender",
-  working: "Xtrace",
   job: "Frontend Developer",
   live: "Chengdu",
   email: "enderromantic@gmail.com",
@@ -9,7 +8,6 @@ export const about_profile = {
 
 export const about_lines = [
   `Hi, I'm ${about_profile.name}`,
-  `${about_profile.job}${about_profile.working ? ` @ ${about_profile.working}` : ""}`,
   `I live in ${about_profile.live}. `,
   `If you want to coffee with me`,
   `please contact me :)`,
